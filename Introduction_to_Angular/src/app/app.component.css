@@ -1,0 +1,25 @@
+header {
+    padding: 25px;
+    font-family: "Lobster",sans-serif;
+    font-size: 35px;
+    background-color: #A7EBF2;
+    color: #F25764;
+}
+.logo-santa {
+    width: 30px;
+    height: 30px;
+}
+
+.jugar {
+    float: right;
+    background-color: #F25764;
+    border-color: #FFFFFF;
+    border-width: 5px;
+    border-radius: 20px;
+    padding: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-family: "Lobster",sans-serif;
+}
+
+
