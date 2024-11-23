@@ -9,4 +9,7 @@ import { Component } from '@angular/core';
 })
 export class CharacterListComponent {
 
+  searchHousingLocations(searchText: string) {
+    console.log(searchText);
+  }
 }
