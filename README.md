@@ -411,5 +411,51 @@ En `app.component.html`, agrega un nuevo elemento `<article>` para mostrar las p
 
 ## Mejorar las Plantillas
 
-Aplica estilos personalizados y mejora el diseño con Angular Material.
+La interfaz de usuario actualmente contiene artefactos de texto del panel de detalles que deberían mostrarse condicionalmente. Vamos a utilizar dos características de Angular: `ng-container` y `*ngIf`.
 
+Si aplicamos la directiva `ngIf` directamente al elemento `<article>`, se produce un cambio de diseño cuando el usuario realiza la primera selección. Para mejorar esta experiencia, podemos envolver los detalles de la ubicación en otro elemento que sea hijo del artículo. Este elemento no tiene estilo ni función, y solo agrega peso al DOM. Para evitar esto, podemos usar `ng-container`. Podemos aplicar directivas a él, pero no aparecerá en el DOM final.
+
+En `app.component.html`, actualiza el artículo para que coincida con el siguiente código:
+
+```html
+<article>
+  <ng-container>
+    <img [src]="selectedCharacter?.image">
+    <p>{{selectedCharacter?.name}}</p>
+    <p>{{selectedCharacter?.description}}</p>
+    <p>{{selectedCharacter?.hobbies ? "Has hobbies" : "Does Not have hobbies"}}</p>
+  </ng-container>
+</article>
+```
+
+Luego, agrega el atributo `*ngIf` al elemento `ng-container`. El valor debe ser `selectedCharacter`.
+
+```html
+<article>
+  <ng-container *ngIf="selectedLocation">
+    ...
+  </ng-container>
+</article>
+```
+
+Ahora, la aplicación solo mostrará el contenido del elemento `ng-container` si `selectedLocation` es verdadero.
+
+Guarda este código y confirma que el navegador ya no muestra los artefactos de texto cuando se carga la página.
+
+Hay una última actualización que podemos hacer en nuestra aplicación. Los resultados de búsqueda en `housing-location.component.html` deberían mostrar más detalles.
+
+En `housing-location.component.html`, actualiza el código a:
+
+```html
+<label for="character-search">Search for a new character</label>
+<input id="character-search" #search placeholder="Ex: Santa Clauss">
+<button (click)="searchCharacters(search.value)">Search</button>
+
+<article *ngFor="let character of results" (click)="selectCharacter(character)">
+    <img [src]="character?.image">
+    <h2>{{ character.name }}</h2>
+    <button (click)="selectCharacter(character)">Ver</button>
+</article>
+```
+
+Guarda el código y regresa al navegador para ver la aplicación completada.

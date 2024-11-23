@@ -2,7 +2,7 @@
 <input id="character-search" #search placeholder="Ex: Santa Clauss">
 <button (click)="searchCharacters(search.value)">Search</button>
 
-<article *ngFor="let character of results">
+<article *ngFor="let character of results" (click)="selectCharacter(character)">
     <img [src]="character?.image">
     <h2>{{ character.name }}</h2>
     <button (click)="selectCharacter(character)">Ver</button>

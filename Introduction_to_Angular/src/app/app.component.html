@@ -10,10 +10,12 @@
   <section>
     <app-character-list [characterList]="characterList" (characterSelectedEvent)="updateSelectedCharacter($event)"></app-character-list>
     <article>
-      <img [src]="selectedCharacter?.image">
-      <p>{{selectedCharacter?.name}}</p>
-      <p>{{selectedCharacter?.description}}</p>
-      <p>{{selectedCharacter?.hobbies ? "Has hobbies" : "Does Not have hobbies"}}</p>
+      <ng-container *ngIf="selectedCharacter">
+        <img [src]="selectedCharacter?.image">
+        <p>{{selectedCharacter?.name}}</p>
+        <p>{{selectedCharacter?.description}}</p>
+        <p>{{selectedCharacter?.hobbies ? "Has hobbies" : "Does Not have hobbies"}}</p>
+      </ng-container>
     </article>
   </section>
 </main>

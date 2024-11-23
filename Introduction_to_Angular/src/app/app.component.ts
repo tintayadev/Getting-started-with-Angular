@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CharacterListComponent } from "./character-list/character-list.component";
+import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { Character } from './character';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CharacterListComponent],
+  imports: [RouterOutlet, CharacterListComponent, CommonModule], // Añade CommonModule aquí
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'] // Asegúrate de que 'styleUrls' esté bien escrito (tienes 'styleUrl' incorrecto)
 })
 export class AppComponent {
   title = 'Introduction_to_Angular';
