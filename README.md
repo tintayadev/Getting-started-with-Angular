@@ -66,7 +66,20 @@ Angular utiliza componentes para estructurar sus aplicaciones, estos son reutili
 
 ## Manejo de Eventos
 
-Los eventos permiten la interacción usuario-aplicación.
+La app tiene un campo de entrada y un botón, pero le falta la interacción. Por lo general, en la Web interactúas con los controles y, además, invocas el uso de eventos y controladores de eventos. Usarás esta estrategia para compilar tu app.
+
+Se realizarán cambios en `character-list.component.html` y agregaremos un método  `searchCharacters()` en `character-list.compoment,ts`
+1. Ahora nos vamos al archivo `character-list.compoment,ts` y creamos el método  `searchCharacters()` de la siguiente forma
+```
+searchCharacters(searchText: string) {
+    console.log(searchText);
+}
+```
+2. Una vez realizado lo anterior nos vamos a `character-list.component.html` y editaremos el codigo de la siguiente forma
+```
+<button (click)="searchCharacters(search.value)">Search</button>
+```
+
 
 ### Ejemplo práctico
 1. Enlaza un botón con `(click)="nombreMetodo()"`.
