@@ -12,6 +12,7 @@ import { Character } from './character';
 })
 export class AppComponent {
   title = 'Introduction_to_Angular';
+
   characterList: Character[] = [
     {
       name: "Papá Noel",
@@ -62,4 +63,10 @@ export class AppComponent {
       image: "../assets/osos.jpeg",
     }
   ];
+
+  selectedCharacter: Character | undefined;
+
+  updateSelectedCharacter(character: Character) {
+    this.selectedCharacter= character;
+  }
 }

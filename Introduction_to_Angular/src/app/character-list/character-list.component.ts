@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Character } from '../character';
 import { CommonModule } from '@angular/common'; // Importa CommonModule
 
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common'; // Importa CommonModule
 })
 export class CharacterListComponent implements OnInit {
   @Input() characterList: Character[] = [];
+  @Output() characterSelectedEvent = new EventEmitter<Character>();
   results: Character[] = [];
 
   constructor() {}
@@ -27,5 +28,9 @@ export class CharacterListComponent implements OnInit {
         .includes(
             searchText.toLowerCase()
       ));
+  }
+
+  selectCharacter(character: Character) {
+    this.characterSelectedEvent.emit(character);
   }
 }

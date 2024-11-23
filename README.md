@@ -325,10 +325,89 @@ En el archivo `housing-list.component.html`, reemplaza `locationList` con `resul
 
 ## Mostrar Detalles
 
-Implementa rutas para navegar a vistas detalladas.
+La aplicación necesita permitir que al hacer clic en un resultado de búsqueda, se muestre su información en un panel de detalles. El componente `CharacterListComponent` sabe cuál resultado se seleccionó, ya que muestra los datos. Sin embargo, se requiere una forma de compartir esta información con el componente padre `AppComponent`.
 
-### Ejemplo práctico
-Define una ruta con parámetros y enlázala a un componente detallado.
+En Angular, `@Input()` envía datos del componente padre al hijo, mientras que `@Output()` permite que los componentes envíen un evento con datos del hijo al componente padre. El decorador `@Output()` utiliza un `EventEmitter` para notificar a los listeners sobre eventos. En este caso, queremos emitir un evento cuando se haga clic en un resultado de búsqueda, enviando el elemento seleccionado como parte del payload.
+
+### Actualizar `CharacterListComponent`
+
+En `character-list.component.ts`, actualiza las importaciones para incluir `Output` y `EventEmitter` de `@angular/core` y `Character` desde su archivo correspondiente:
+
+```typescript
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Character } from '../character';
+```
+
+En la clase `CharacterListComponent`, agrega una nueva propiedad llamada `characterSelectedEvent` de tipo `EventEmitter<Character>`:
+
+```typescript
+@Output() characterSelectedEvent = new EventEmitter<Character>();
+```
+
+La propiedad `characterSelectedEvent` está decorada con `@Output()`, lo que la convierte en parte de la API de este componente. El uso de `EventEmitter` con generics (`Character`) asegura que los datos emitidos sean del tipo esperado, brindando seguridad de tipo y reduciendo errores.
+
+### Crear el Método `selectCharacter`
+
+Actualiza `CharacterListComponent` agregando un nuevo método llamado `selectCharacter`, que acepta un parámetro de tipo `Character`:
+
+```typescript
+selectCharacter(character: Character) {
+  this.characterSelectedEvent.emit(character);
+}
+```
+
+Este método emite un evento a través de `characterSelectedEvent`, enviando la ubicación seleccionada por el usuario.
+
+### Vincular al Template
+
+En `character-list.component.html`, agrega un botón dentro del elemento `article` que llame al método `selectCharacter` al hacer clic, pasando la ubicación seleccionada como argumento:
+
+```html
+<article *ngFor="let character of results">
+    <h2>{{ character.name }}</h2>
+    <button (click)="selectCharacter(character)">Ver</button>
+</article>
+```
+
+Los botones ahora son clicables y transmiten los valores al componente.
+
+### Actualizar `AppComponent` para Escuchar el Evento
+
+En `app.component.html`, escucha el evento `locationSelectedEvent` y maneja el evento con el método `updateSelectedLocation`:
+
+```html
+<app-character-list [characterList]="characterList" (characterSelectedEvent)="updateSelectedCharacter($event)"></app-character-list>
+```
+
+El argumento `$event` es un objeto de tipo `Character`, ya que es el tipo configurado en el `EventEmitter`.
+
+En `app.component.ts`, agrega una nueva propiedad llamada `selectedLocation` de tipo `Character | undefined`:
+
+```typescript
+selectedCharacter: Character | undefined;
+```
+
+Crea un nuevo método llamado `updateSelectedLocation`, que actualice la propiedad `selectedLocation` con el valor recibido:
+
+```typescript
+updateSelectedCharacter(character: HousingLocation) {
+  this.selectedLocation = location;
+}
+```
+
+### Mostrar los Detalles del Elemento Seleccionado
+
+En `app.component.html`, agrega un nuevo elemento `<article>` para mostrar las propiedades de la ubicación seleccionada. Usa el operador de encadenamiento opcional para manejar posibles valores `undefined` y una sintaxis ternaria para los valores booleanos:
+
+```html
+<article>
+  <img [src]="selectedCharacter?.image">
+  <p>{{selectedCharacter?.name}}</p>
+  <p>{{selectedCharacter?.description}}</p>
+  <p>{{selectedCharacter?.hobbies}}</p>
+</article>
+```
+
 
 ## Mejorar las Plantillas
 

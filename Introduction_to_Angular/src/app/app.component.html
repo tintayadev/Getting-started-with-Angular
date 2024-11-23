@@ -8,6 +8,12 @@
     </a>
   </header>
   <section>
-    <app-character-list [characterList]="characterList"></app-character-list>
+    <app-character-list [characterList]="characterList" (characterSelectedEvent)="updateSelectedCharacter($event)"></app-character-list>
+    <article>
+      <img [src]="selectedCharacter?.image">
+      <p>{{selectedCharacter?.name}}</p>
+      <p>{{selectedCharacter?.description}}</p>
+      <p>{{selectedCharacter?.hobbies ? "Has hobbies" : "Does Not have hobbies"}}</p>
+    </article>
   </section>
 </main>

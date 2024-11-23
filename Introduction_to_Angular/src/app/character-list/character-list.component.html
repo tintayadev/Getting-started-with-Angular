@@ -3,5 +3,7 @@
 <button (click)="searchCharacters(search.value)">Search</button>
 
 <article *ngFor="let character of results">
+    <img [src]="character?.image">
     <h2>{{ character.name }}</h2>
+    <button (click)="selectCharacter(character)">Ver</button>
 </article>
