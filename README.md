@@ -85,12 +85,158 @@ searchCharacters(searchText: string) {
 1. Enlaza un botón con `(click)="nombreMetodo()"`.
 2. Define el método en el archivo TypeScript.
 
+
 ## Mostrar Resultados de Búsqueda
 
-Usa directivas como `*ngFor` para iterar datos.
+El siguiente paso es mostrar resultados basados en la entrada del usuario. Cada ubicación tiene las siguientes propiedades:
 
-### Ejemplo
-Crea una lista dinámica que muestre resultados.
+- **name** (string): "Papá Noel"
+- **description** (string): "El alegre repartidor de regalos más famoso del mundo."
+- **habbies** (string): "Fabricar juguetes, volar en trineo, leer cartas de niños"
+- **image** (string): "/path/to/photo.jpg"
+
+Es posible representar estos datos como un objeto de JavaScript común, pero es mejor usar TypeScript en Angular para evitar errores durante la compilación. En TypeScript, se pueden usar interfaces para definir las características de los datos. Esto se conoce como "dar forma a los datos".
+
+### Crear una Interfaz para los Datos de Ubicación
+
+1. Usa el Angular CLI para generar una interfaz llamada `Character`:
+   ```bash
+   ng generate interface character
+   ```
+
+2. En el archivo `character.ts`, agrega los detalles del tipo para la interfaz:
+```typescript
+   export interface Character {
+    name: string;
+    description: string;
+    hobbies: string;
+    image: string;
+  }
+```
+
+
+### Crear Datos de Ejemplo en `app.component.ts`
+
+1. Importa la interfaz desde `./character`:
+   ```typescript
+   import { Character } from './character';
+   ```
+
+2. Crea una propiedad `characterList` en la clase `AppComponent` con el tipo `Character[]` y agrega datos de ejemplo:
+```typescript
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { CharacterListComponent } from "./character-list/character-list.component";
+import { Character } from './character';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, CharacterListComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent {
+  title = 'Introduction_to_Angular';
+  characterList: Character[] = [
+    {
+      name: "Papá Noel",
+      description: "El alegre repartidor de regalos más famoso del mundo.",
+      hobbies: "Fabricar juguetes, volar en trineo, leer cartas de niños",
+      image: "../assets/papa_noel.jpeg",
+    },
+    {
+      name: "Los renos",
+      description: "Los fieles compañeros de viaje de Papá Noel.",
+      hobbies: "Volar, comer hierba, tirar trineo",
+      image: "../assets/renos.jpeg",
+    },
+    {
+      name: "Elfos Chef",
+      description: "Los expertos en cocina navideña que preparan deliciosos bocadillos para todos.",
+      hobbies: "Cocinar, hornear galletas, decorar pasteles",
+      image: "../assets/elfos_chef.jpeg",
+    },
+    {
+      name: "El elfo DJ",
+      description: "El encargado de poner la música navideña más divertida en el Polo Norte.",
+      hobbies: "Poner música, bailar, mezclar canciones",
+      image: "../assets/elfo_dj.jpeg",
+    },
+    {
+      name: "Sra. Claus",
+      description: "La organizadora y cuidadora del Polo Norte.",
+      hobbies: "Tejer, decorar, leer cuentos",
+      image: "../assets/sra_claus.jpeg",
+    },
+    {
+      name: "Los pingüinos",
+      description: "Los simpáticos habitantes del Polo Sur que ayudan a Papá Noel en sus viajes.",
+      hobbies: "Patinar sobre hielo, pescar, cantar",
+      image: "../assets/pinguinos.jpeg",
+    },
+    {
+      name: "El Yeti",
+      description: "La misteriosa criatura de las montañas nevadas.",
+      hobbies: "Esquiar, escalar, jugar con la nieve",
+      image: "../assets/yeti.jpeg",
+    },
+    {
+      name: "Los osos",
+      description: "Los animales más fuertes y peludos del Polo Norte.",
+      hobbies: "Hibernar, pescar, jugar",
+      image: "../assets/osos.jpeg",
+    }
+  ];
+}
+
+```
+
+### Compartir Datos entre Componentes
+
+1. Importa `Input` desde `@angular/core` en `housing-list.component.ts` y la interfaz `HousingLocation` desde `./housing-location`:
+   ```typescript
+   import { Component, OnInit, Input } from '@angular/core';
+   import { HousingLocation } from '../housing-location';
+   ```
+
+2. Declara una propiedad `locationList` en el cuerpo de la clase del componente y utiliza `@Input` como decorador:
+   ```typescript
+   export class HousingListComponent implements OnInit {
+       @Input() locationList: HousingLocation[] = [];
+       ...
+   }
+   ```
+
+3. En `app.component.html`, enlaza la propiedad `characterList` al atributo `characterList` del elemento `<app-character-list>`:
+   ```html
+   <main>
+      ...
+      <section>
+      <app-character-list [characterList]="characterList"></app-character-list>
+    </section>
+   </main>
+   ```
+
+### Mostrar Resultados en el Navegador
+
+1. En `character-list.component.html`, utiliza `*ngFor` para iterar sobre los datos del array `characterList`:
+   ```html
+   <article *ngFor="let character of characterList">
+      <h2>{{ character.name }}</h2>
+    </article>
+   ```
+
+2. Agrega un cuadro de búsqueda con un botón en `app.component.html`:
+   ```html
+   <input #search><button (click)="searchHousingLocations(search.value)">Search</button>
+   ```
+
+### Nota sobre Errores
+
+- Verifica que el nombre del atributo `Input` coincida con el nombre de la propiedad en la clase TypeScript.
+- Asegúrate de usar corchetes `[]` para los atributos de entrada.
+
 
 ## Filtrar Resultados de Búsqueda
 
