@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common'; // Importa CommonModule
 })
 export class CharacterListComponent implements OnInit {
   @Input() characterList: Character[] = [];
+  results: Character[] = [];
 
   constructor() {}
 
@@ -19,6 +20,12 @@ export class CharacterListComponent implements OnInit {
   }
 
   searchCharacters(searchText: string): void {
-    console.log(searchText);
+    if (!searchText) return;
+    this.results = this.characterList.filter(
+      (location: Character) => location.name
+        .toLowerCase()
+        .includes(
+            searchText.toLowerCase()
+      ));
   }
 }

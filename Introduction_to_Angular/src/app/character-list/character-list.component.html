@@ -2,6 +2,6 @@
 <input id="character-search" #search placeholder="Ex: Santa Clauss">
 <button (click)="searchCharacters(search.value)">Search</button>
 
-<article *ngFor="let character of characterList">
+<article *ngFor="let character of results">
     <h2>{{ character.name }}</h2>
 </article>

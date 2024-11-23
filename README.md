@@ -202,10 +202,28 @@ export class AppComponent {
 
 2. Declara una propiedad `locationList` en el cuerpo de la clase del componente y utiliza `@Input` como decorador:
    ```typescript
-   export class HousingListComponent implements OnInit {
-       @Input() locationList: HousingLocation[] = [];
-       ...
-   }
+    import { Component, OnInit, Input } from '@angular/core';
+    import { Character } from '../character';
+    import { CommonModule } from '@angular/common'; // Importa CommonModule
+
+    @Component({
+      selector: 'app-character-list',
+      standalone: true,
+      imports: [CommonModule], // Asegúrate de incluir CommonModule aquí
+      templateUrl: './character-list.component.html',
+      styleUrls: ['./character-list.component.css'],
+    })
+    export class CharacterListComponent implements OnInit {
+      @Input() characterList: Character[] = [];
+      results: Character[] = [];
+
+      constructor() {}
+
+      ngOnInit(): void {
+        console.log('CharacterListComponent inicializado');
+      }
+      ...
+    }
    ```
 
 3. En `app.component.html`, enlaza la propiedad `characterList` al atributo `characterList` del elemento `<app-character-list>`:
@@ -240,7 +258,70 @@ export class AppComponent {
 
 ## Filtrar Resultados de Búsqueda
 
-Aplica un filtro simple usando `ngModel` para enlazar un campo de búsqueda.
+Actualmente, la aplicación muestra todos los resultados en lugar de filtrar según la búsqueda del usuario. Para solucionar esto, es necesario actualizar el componente `CharacterListComponent` para que la aplicación funcione como se espera.
+
+### Actualizar `CharacterListComponent`
+
+En el archivo `character-list.component.ts`, agrega una nueva propiedad llamada `results` al componente `CharacterListComponent`. Esta propiedad será de tipo `Character[]`:
+
+```typescript
+export class CharacterListComponent implements OnInit {
+  @Input() characterList: Character[] = [];
+  results: Character[] = [];
+  ...
+}
+```
+
+El array `results` representará las ubicaciones de vivienda que coinciden con la búsqueda del usuario. El siguiente paso es actualizar el método `searchCharacter` para filtrar los valores.
+
+### Filtrar personajes por Búsqueda
+
+Elimina el `console.log` y actualiza el código para asignar a la propiedad `results` el resultado del filtrado de `characterList`, utilizando `searchText` como criterio:
+
+```typescript
+searchCharacters(searchText: string): void {
+  this.results = this.characterList.filter(
+    (location: Character) => location.name
+      .toLowerCase()
+      .includes(
+          searchText.toLowerCase()
+    ));
+}
+```
+
+En este código, se utiliza el método `filter` de los arrays para incluir solo los valores que contienen `searchText`. Todas las comparaciones se realizan utilizando las versiones en minúscula de las cadenas.
+
+### Notas Importantes
+
+1. **Prefijo `this`:** Es necesario usar el prefijo `this` al referirse a las propiedades de una clase dentro de los métodos, como en `this.results` y `this.characterList`.
+
+2. **Propiedades adicionales:** Actualmente, la función de búsqueda solo coincide con la propiedad `name`, pero puedes modificar el código para incluir otras propiedades si lo necesitas.
+
+### Mejorar la Función de Búsqueda
+
+Actualiza el código para evitar filtrar el array si `searchText` está vacío:
+
+```typescript
+searchCharacters(searchText: string): void {
+  if (!searchText) return;
+  this.results = this.characterList.filter(
+    (location: Character) => location.name
+      .toLowerCase()
+      .includes(
+          searchText.toLowerCase()
+    ));
+}
+```
+
+### Cambios en la Plantilla
+
+En el archivo `housing-list.component.html`, reemplaza `locationList` con `results` en la directiva `*ngFor`:
+
+```html
+<article *ngFor="let character of results">
+  <h2>{{ character.name }}</h2>
+</article>
+```
 
 ## Mostrar Detalles
 
